@@ -8,7 +8,6 @@
 	{
 		"path" : "<full-file-path>",
 		"tag"  : "<file-tag>"
-	}
 	}],
 	"tests_to_run" : ["<test1>","<test2>"],
 	"evaluation_file" : "<evaluation-file-path>"
