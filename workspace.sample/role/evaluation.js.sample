@@ -1,0 +1,77 @@
+/*
+ *
+ *
+        This file comprises of the logic to
+		compute the result of all the individual tests that are run.
+		
+		Variables:
+		TestResult 	=> 	The JSON Array comprising of the results of all tests
+						e.g.
+						[{
+						"status": true,
+						"messages" : []
+						},
+						{
+						"status": false,
+						"messages": ["JAVA_HOME is not set"]
+						}]
+		HostInfo	=> 	The information regarding the host on which the test is running
+						e.g.
+						[
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						}
+						]
+		ClusterInfo	=>	The information regarding the entire cluster
+						e.g.
+						[
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						},
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						}
+						]
+						
+		File		=> 	Name of the Evaluation file
+						e.g.
+						filename.js
+						
+		Name		=> 	Name of the module
+						e.g.
+						hadoop_standalone
+						
+ *
+ *
+ * */
+
+var result_fn = function() {
+
+	output = {}
+
+	testResult = JSON.parse(TestResult)
+		
+	output.name = Name
+	output.messages = []
+	for(t in testResult) {
+
+		// Logic will come here	
+	}
+	output.status = final_status
+
+	return JSON.stringify(output)
+}
+
+var result = result_fn()

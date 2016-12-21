@@ -6,7 +6,6 @@ import (
 	"os"
 	"encoding/json"
 	"fmt"
-	"github.com/fatih/color"
 )
 
 // get test information
@@ -68,7 +67,7 @@ func RunTest( params map[string] interface {}, hostinfo models.HostInfo) string 
 	// data required for the test
  	GetMethod,_ := params["GetMethod"].(string)
  	command := RunJS(params,"tests",GetMethod)
-	output := Execute(hostinfo.Ip, hostinfo.User, hostinfo.Password, command)
+	output := Execute(&hostinfo.Ip, &hostinfo.User, &hostinfo.Password, &command)
 
 	// run the check on the data obtained from the host	
 	params["data"] = output
@@ -87,11 +86,6 @@ func RunModuleEvaluation(params map[string] interface {}) string {
 
 // render table
 func RenderRecord(Ip string, tag string, result []models.Result) {
-
-	red := color.New(color.FgRed, color.Bold)
- 	green := color.New(color.FgGreen, color.Bold)
- 	white := color.New(color.FgWhite, color.Bold)
-	
 
 	white.Printf(Ip + "\t" + tag + "\t")
 	

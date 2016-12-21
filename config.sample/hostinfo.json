@@ -1,0 +1,9 @@
+[
+	{
+	"ip": "<ip address>",
+	"user": "<login username>",
+	"tag" : "<tag for machine/node reference>",
+	"password": "<login password>",
+	"module": ["<module_name>"]
+	}
+]

@@ -1,8 +1,9 @@
 package help
 
-func Needed(args []string) bool{
- 
-	if(len(args) == 0 || args[0] == "--help") {
+func Needed(args *[]string) bool{
+
+	arguments := *args  
+	if(len(arguments) == 0 || arguments[0] == "--help") {
          	
 		return true
  	
@@ -11,8 +12,4 @@ func Needed(args []string) bool{
 		return false
 	
 	}
-}
-func Greet() {
-
-
 }

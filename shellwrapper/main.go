@@ -25,8 +25,9 @@ func Cluster (args ...string) (string,error) {
 	i++
 	}
 
+	headers := []string{"Host", "Tag", "Module"}
 	// render the output in the form of a table
-	utils.RenderTable([]string{"Host","Tag","Module"}, cluster)
+	utils.RenderTable(&headers, &cluster)
 
 	return "",nil
 }
@@ -35,7 +36,7 @@ func Cluster (args ...string) (string,error) {
 // run a command on a remote machine
 func Run (args ...string) (string,error) {
 	// check for help
-	if help.Needed(args) {
+	if help.Needed( &args ) {
         	fmt.Println(utils.RUN)
         	return "", nil
 	}
@@ -46,10 +47,10 @@ func Run (args ...string) (string,error) {
 	var info = ""
 
 	// get the ip address if host tag is passed
-	h := utils.GetHostEntry(reference)
+	h := utils.GetHostEntry(&reference)
 
 	// run the command on the host
-	info = utils.Execute(h.Ip,h.User,h.Password,command)
+	info = utils.Execute(&h.Ip, &h.User, &h.Password, &command)
 
 	return info,nil
 }
@@ -73,7 +74,7 @@ func Config(args ...string) (string,error) {
 					for _,f := range mc.FileInfo {
 						data = append(data,[]string{ f.Tag, f.Path })	
 					}
-					utils.RenderTable(headers,data)
+					utils.RenderTable(&headers, &data)
 					fmt.Println()
 				}
 			

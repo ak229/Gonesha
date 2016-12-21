@@ -1,0 +1,107 @@
+/*
+*
+*
+		This is used to run individual tests
+		Each test involves two parts
+			1. GetMethod - Return a shell command which will give required data for testing
+			2. CheckMethod - This will contain the core logic of the testing scenario
+					 The output of the shell command will come as input
+
+
+		Common Variables
+		
+		Name		=>	Name of the test
+					e.g.
+					unit
+		
+		File		=>	Path of the file relative to the workspace test
+					e.g.
+					unit.js
+	
+		HostInfo	=> 	The information regarding the host on which the test is running
+						e.g.
+						[
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						}
+						]
+		
+		ClusterInfo	=>	The information regarding the entire cluster
+						e.g.
+						[
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						},
+						{
+						"ip": "<ip address>",
+						"user": "<login username>",
+						"tag" : "<tag for machine/node reference>",
+						"password": "<login password>",
+						"module": ["<module_name>"]
+						}
+						]
+
+		CheckMethod Variables:	
+
+		data		=>	The output of the shell command from the GetMethod
+					e.g.
+					if the command is "ls"
+					data would be
+					bin
+					etc
+					usr
+*
+*
+*/
+
+// Get Method
+var sample_get_fn = function() {
+
+	return "<shell-command>";
+
+} 
+
+// Check Method
+var sample_check_fn = function() {
+
+	if( typeof(data) == "undefined" ) {
+
+		return ""
+	}	
+
+	var output = {};
+	output.name = Name;
+	output.response = {};
+	output.response.messages = [];
+	
+
+	/*
+	*
+	*
+		Logic will come here
+
+	*
+	*
+	*/
+
+
+	return JSON.stringify(output);	
+}
+
+try {
+
+	// the variables below should have the same name as the test config
+	sample_get = sample_get_fn()
+	sample_check = sample_check_fn()
+
+} catch(err) {
+	console.log(err.message)
+}

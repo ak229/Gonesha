@@ -1,0 +1,13 @@
+[{
+"name" : "<test-name-1>",
+"file" : "<file-path>",
+"get_method" : "<get-function-name>",
+"check_method" : "<check-function-name>"
+},
+{
+"name" : "<test-name-2>",
+"file" : "jps_standalone.js",
+"file" : "<file-path>",
+"get_method" : "<get-function-name>",
+"check_method" : "<check-function-name>"
+}]

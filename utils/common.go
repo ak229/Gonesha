@@ -52,7 +52,7 @@ func CheckShellSpace() {
 // get the application config
 func GetGanpatiConfig() models.GanpatiConfig{
 	// read from the input file
-        raw, err := ioutil.ReadFile(ShellSpace() + "/config/ganpati.json")
+        raw, err := ioutil.ReadFile(ShellSpace() + "/config/gonesha.json")
         if err != nil {
         fmt.Println(err.Error())
         os.Exit(1)
@@ -178,15 +178,15 @@ func Log(level string,host string, message string) {
 }
 
 // display output in tabular format
-func RenderTable( headers []string, data [][]string ) {
+func RenderTable( headers *[]string, data *[][]string ) {
 	// initialize table
 	table := tablewriter.NewWriter(os.Stdout)
 	
 	// set the headers
-	table.SetHeader(headers)
+	table.SetHeader(*headers)
 	
 	// iterate over the data to be displayed
-	for _, v := range data {
+	for _, v := range *data {
     		table.Append(v)
 	}
 
@@ -195,9 +195,9 @@ func RenderTable( headers []string, data [][]string ) {
 }
 
 // execute the command on the required host
-func Execute( ip string, user string, password string, command string ) string{
+func Execute( ip *string, user *string, password *string, command *string ) string{
 	// establish the connection
-	conn, err := ssh.Dial("tcp", ip+":22", RemoteCredentials(user, password))
+	conn, err := ssh.Dial("tcp", *ip+":22", RemoteCredentials(*user, *password))
 	if err != nil {
         	fmt.Println(err)
 	}
@@ -208,74 +208,16 @@ func Execute( ip string, user string, password string, command string ) string{
 	session.Stdout = &stdoutBuf
 
 	// run the command
- 	session.Run(command)
+ 	session.Run(*command)
 
 	// get the output of the command
  	var info string = stdoutBuf.String()
 	return info
 }
 
-// check if required services are running ( may not be needed )
-func CheckJpsService(name string, host string, conn *ssh.Client) bool{
-
-	var stdoutBuf bytes.Buffer
-        var services = strings.TrimSpace(Services(host,NewSession(conn),stdoutBuf))
-
-
-        result := true
-        if len(services) == 0{
-
-		result = false
-
-        } else {
-		
-		if !strings.Contains("_"+services,name) {
-
-			result = false
-		
-		}
-	}
-
-	return result
-
-}
-
-// color coding of host information
-func HostHealth(hostInfo models.HostInfo, hostData models.HostData) {
-
-	red := color.New(color.FgRed, color.Bold)
-	green := color.New(color.FgGreen, color.Bold)
-	white := color.New(color.FgWhite, color.Bold)
-	if len(hostData.Ip) == 0 {
-		red.Printf(hostInfo.Ip + "\t")
-		for _,m := range hostInfo.Module {
-
-			red.Printf(m + "\t")
-		}
-
-	} else {
-
-		white.Printf(hostInfo.Ip+ "\t")
-		for _,m := range hostData.ModuleDataList {
-
-			if m.Status {
-		
-				green.Printf(m.Module + "\t")	
-		
-			} else {
-
-
-				red.Printf(m.Module + "\t")
-			}
-			
-		}
-	}
-
-	fmt.Println("\n\n")
-}
 
 // get ip address from reference ( tag or ip address )
-func GetHostEntry( alias string) models.HostInfo {
+func GetHostEntry( alias *string) models.HostInfo {
 	// get the cluster info
 	var result models.HostInfo
 	hostInfo := GetHostInfo()
@@ -283,7 +225,7 @@ func GetHostEntry( alias string) models.HostInfo {
 	// iterate over the cluster
 	for _,h := range hostInfo {
 		// check for a match
-        	if h.Ip == alias || h.Tag == alias {
+        	if h.Ip == *alias || h.Tag == *alias {
 			result = h
          		break
 		}
@@ -293,6 +235,7 @@ func GetHostEntry( alias string) models.HostInfo {
 
 // get the config files
 func ConfigFiles() []models.Module {
+	
 	// read from the input file
 	raw, err := ioutil.ReadFile(ShellSpace() + "/config/modules.json")
 	if err != nil {
