@@ -22,8 +22,6 @@ func main() {
 	// intialize commands
 	shell.Register("cluster",shellwrapper.Cluster)
         shell.Register("run",shellwrapper.Run)
-        shell.Register("status",shellwrapper.Status)
-        shell.Register("status",shellwrapper.Status)
         shell.Register("config", shellwrapper.Config)
         shell.Register("fetchinfo",shellwrapper.FetchInfo)
         

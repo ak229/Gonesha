@@ -2,14 +2,9 @@ package shellwrapper
 
 import (
 	"strings"
-	"golang.org/x/crypto/ssh"
 	"sync"
-	"../modules/hadoop_standalone"
 	"../utils"
-	"net"
-	"time"
 	"../models"
-	"github.com/fatih/color"
 	"fmt"
 	"../help"
 	"encoding/json"
@@ -59,72 +54,6 @@ func Run (args ...string) (string,error) {
 	return info,nil
 }
 
- 
-// get the status of the cluster ( this may not be needed eventually )
-func Status (args ...string) (string,error) {
-	// check for help	
-	if help.Needed(args) {
-        	fmt.Println(utils.STATUS)
-        	return "", nil
-	}
-
-	white := color.New(color.FgWhite,color.Bold)
-	white.Println("\t\t\t\t*****Cluster Status*****")
-	hostInfo := utils.GetHostInfo()
- 	// thread initialization
- 	var wg sync.WaitGroup
- 	wg.Add(len(hostInfo))
-	i := 0
-	hostData := make([] models.HostData,len(hostInfo))
-	for _,h := range hostInfo {
-
-		go func(i int,module []string,ip string,user string, password string) {
-                 
-			conn_init, err := net.DialTimeout("tcp",ip+":22",time.Duration(5) * time.Second)
-			if err != nil {
-				wg.Done()
-				return	
-			}
-
-			if conn_init == conn_init {
-
-			}
-			
-			conn, err := ssh.Dial("tcp", ip+":22", utils.RemoteCredentials(user, password))
-			if err != nil {
-                 		wg.Done()
-				return
-			}
-                 	
-			defer wg.Done()
-                 	
-			moduleData := []models.ModuleData{} 
- 
-			for _,m := range module {
-				
-				moduleData = append(moduleData, resolve(m, ip, conn))
-                 	
-			}
-		
-			hostData[i] = models.HostData{Ip: ip, ModuleDataList : moduleData}
-
-         	}(i, h.Module, h.Ip, h.User, h.Password)
-	i++
-	}	
-
-	wg.Wait()
-	
-	i = 0
-	for _,h := range hostInfo {
-
-		utils.HostHealth(h, hostData[i])
-	i++	
-	}
-
-	return "",nil
-
-
-}
 
 // gets the configuration information corresponding to each module
 func Config(args ...string) (string,error) {
@@ -156,23 +85,6 @@ func Config(args ...string) (string,error) {
 	}
 	return result,nil
 }
-
-
-
-// Mapper ( may not be needed later )
-func resolve(module string,host string, conn *ssh.Client) models.ModuleData{
-
-	var output models.ModuleData
-        if module == "hadoop_standalone" {
-                output = hadoop_standalone.RunTests(module, host, conn) 
-        } else if module == "hadoop_cluster" {
-
-        }
-
-	return output
-}
-
-
 
 func FetchInfo(args ...string) (string,error) {
 	// get cluster info
